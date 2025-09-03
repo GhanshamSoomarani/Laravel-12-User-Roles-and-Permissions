@@ -1,24 +1,53 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-white" href="{{ url('/') }}">
-            <i class="fa fa-laravel me-1"></i> {{ config('app.name', 'Laravel') }}
-        </a>
+        {{-- Brand --}}
+       <a class="navbar-brand fw-bold text-white" href="{{ url('/') }}">
+    <i class="fa fa-code me-2"></i> {{ config('app.name', 'Laravel') }}
+</a>
 
+
+        {{-- Toggler for mobile --}}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarContent" aria-controls="navbarContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        {{-- Collapsible content --}}
         <div class="collapse navbar-collapse" id="navbarContent">
-            <!-- Left side (optional links) -->
-            <h5 class="text-center mb-4"><i class="fa fa-bars me-2"></i> Menu</h5>
+            {{-- Centered Menu --}}
+            <ul class="navbar-nav mx-auto text-center">
+                <li class="nav-item">
+                    <a href="{{ route('home') }}"
+                       class="nav-link {{ request()->is('home') ? 'active fw-bold' : '' }}">
+                        <i class="fa fa-home me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}"
+                       class="nav-link {{ request()->is('users*') ? 'active fw-bold' : '' }}">
+                        <i class="fa fa-users me-1"></i> Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('roles.index') }}"
+                       class="nav-link {{ request()->is('roles*') ? 'active fw-bold' : '' }}">
+                        <i class="fa fa-user-shield me-1"></i> Roles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('contracts.index') }}"
+                       class="nav-link {{ request()->is('contracts*') ? 'active fw-bold' : '' }}">
+                        <i class="fa fa-file-contract me-1"></i> Contracts
+                    </a>
+                </li>
+            </ul>
 
-            <!-- Right side (user dropdown) -->
+            {{-- Right Side: User Dropdown --}}
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#"
+                       role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         <i class="fa fa-user-circle me-1"></i> {{ Auth::user()->name }}
                     </a>
 
