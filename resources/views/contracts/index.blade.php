@@ -1,64 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Contracts</h2>
-        </div>
-        <div class="pull-right">
-            @can('contract-create')
-            <a class="btn btn-success btn-sm mb-2" href="{{ route('contracts.create') }}">
-                <i class="fa fa-plus"></i> Create New Contract
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Contracts</h2>
+
+        {{-- Only users with contract-create permission can see this --}}
+        @can('contract-create')
+            <a href="{{ route('contracts.create') }}" class="btn btn-success">
+                <i class="fa fa-plus"></i> Create Contract
             </a>
-            @endcan
-        </div>
+        @endcan
     </div>
+
+    {{-- Flash message --}}
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Detail</th>
+                <th>Created At</th>
+                <th width="180px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($contracts as $contract)
+                <tr>
+                    <td>{{ $contract->name }}</td>
+                    <td>{{ Str::limit($contract->detail, 50) }}</td>
+                    <td>{{ $contract->created_at->format('d M Y') }}</td>
+                    <td>
+                        @can('contract-list')
+                            <a href="{{ route('contracts.show', $contract->id) }}" class="btn btn-primary btn-sm">
+                                View
+                            </a>
+                        @endcan
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="4">No contracts found.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
-
-@session('success')
-    <div class="alert alert-success" role="alert">
-        {{ $value }}
-    </div>
-@endsession
-
-<table class="table table-bordered">
-    <tr>
-        <th>No</th>
-        <th>Name</th>
-        <th>Details</th>
-        <th width="280px">Action</th>
-    </tr>
-    @foreach ($contracts as $contract)
-    <tr>
-        <td>{{ ++$i }}</td>
-        <td>{{ $contract->name }}</td>
-        <td>{{ $contract->detail }}</td>
-        <td>
-            <form action="{{ route('contracts.destroy',$contract->id) }}" method="POST">
-                <a class="btn btn-info btn-sm" href="{{ route('contracts.show',$contract->id) }}">
-                    <i class="fa-solid fa-list"></i> Show
-                </a>
-                @can('contract-edit')
-                <a class="btn btn-primary btn-sm" href="{{ route('contracts.edit',$contract->id) }}">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </a>
-                @endcan
-
-                @csrf
-                @method('DELETE')
-
-                @can('contract-delete')
-                <button type="submit" class="btn btn-danger btn-sm">
-                    <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                @endcan
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</table>
-
-{!! $contracts->links() !!}
-
 @endsection

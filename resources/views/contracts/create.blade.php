@@ -1,52 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Add New Contract</h2>
+<div class="container">
+    <h2>Create New Contract</h2>
+
+    {{-- Validation Errors --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="pull-right">
-            <a class="btn btn-primary btn-sm" href="{{ route('contracts.index') }}">
-                <i class="fa fa-arrow-left"></i> Back
-            </a>
+    @endif
+
+    <form action="{{ route('contracts.store') }}" method="POST">
+        @csrf
+        <div class="form-group mb-3">
+            <label>Contract Name</label>
+            <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Enter contract name" required>
         </div>
-    </div>
+
+        <div class="form-group mb-3">
+            <label>Contract Details</label>
+            <textarea name="detail" class="form-control" rows="4" placeholder="Enter details">{{ old('detail') }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Contract</button>
+        <a href="{{ route('contracts.index') }}" class="btn btn-secondary">Back</a>
+    </form>
 </div>
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-<form action="{{ route('contracts.store') }}" method="POST">
-    @csrf
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Name:</strong>
-                <input type="text" name="name" class="form-control" placeholder="Name">
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Detail:</strong>
-                <textarea class="form-control" style="height:150px" name="detail" placeholder="Detail"></textarea>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" class="btn btn-primary btn-sm mb-3 mt-2">
-                <i class="fa-solid fa-floppy-disk"></i> Submit
-            </button>
-        </div>
-    </div>
-</form>
-
 @endsection
